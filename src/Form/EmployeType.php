@@ -18,6 +18,7 @@ class EmployeType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, [
+                'label' => 'Nom de famille',
                 'attr' => [
                     'class' => 'form-control'
                 ]
