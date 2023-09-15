@@ -26,11 +26,27 @@ class EntrepriseController extends AbstractController
     }
 
     #[Route('/entreprise/new', name: 'new_entreprise')]
-    public function new(Request $request): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $entreprise = new Entreprise();
 
         $form = $this->createForm(EntrepriseType::class, $entreprise);
+
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $form->getData() holds the submitted values
+            // but, the original `$task` variable has also been updated
+            $entreprise = $form->getData();
+
+            // tell Doctrine you want to (eventually) save the Product (no queries yet)
+            $entityManager->persist($entreprise);
+
+            // actually executes the queries (i.e. the INSERT query)
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_entreprise');
+        }
 
         return $this->render('entreprise/new.html.twig', [
             'formAddEntreprise' => $form,
