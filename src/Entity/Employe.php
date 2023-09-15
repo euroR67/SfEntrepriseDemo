@@ -98,11 +98,6 @@ class Employe
         return $this;
     }
 
-    public function __toString(): string
-    {
-        return $this->prenom . ' ' . $this->nom;
-    }
-
     public function getVille(): ?string
     {
         return $this->ville;
@@ -113,5 +108,17 @@ class Employe
         $this->ville = $ville;
 
         return $this;
+    }
+
+    public function getAge(): ?string
+    {
+        $now = new \DateTime();
+        $interval = $this->dateNaissance->diff($now);
+        return $interval->format("%Y");
+    }
+
+    public function __toString(): string
+    {
+        return $this->prenom . ' ' . $this->nom;
     }
 }
